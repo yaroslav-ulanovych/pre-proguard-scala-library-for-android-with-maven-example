@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.example.preproguard</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>androidapp</artifactId>
+	<packaging>apk</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<version>4.1.1.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android-test</artifactId>
+			<version>4.1.1.4</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>${scalaVersionFull}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.example.preproguard</groupId>
+			<artifactId>androidapp-deps</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>org.scala-lang</groupId>
+					<artifactId>scala-library</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>proguard</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.scala-lang</groupId>
+					<artifactId>scala-library</artifactId>
+					<version>${scalaVersionFull}</version>
+				</dependency>
+				<dependency>
+					<groupId>com.example.preproguard</groupId>
+					<artifactId>androidapp-deps</artifactId>
+					<version>1.0-SNAPSHOT</version>
+					<type>pom</type>
+					<exclusions>
+						<exclusion>
+							<groupId>com.example.preproguard</groupId>
+							<artifactId>scala-library</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<!-- enable proguard -->
+					<plugin>
+						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>android-maven-plugin</artifactId>
+						<configuration>
+							<proguard><skip>false</skip></proguard>
+							<classifier>proguard</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+			<plugin><groupId>net.alchim31.maven</groupId><artifactId>scala-maven-plugin</artifactId></plugin>
+			<!-- <plugin><groupId>org.scalatest</groupId><artifactId>scalatest-maven-plugin</artifactId></plugin> -->
+
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<version>3.8.2</version>
+				<configuration>
+					<sdk>
+						<platform>15</platform>
+					</sdk>
+					<emulator>
+						<avd>22</avd>
+					</emulator>
+					<undeployBeforeDeploy>true</undeployBeforeDeploy>
+					<proguard>
+						<skip>true</skip>
+					</proguard>
+				</configuration>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
